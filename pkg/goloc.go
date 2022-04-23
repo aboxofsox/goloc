@@ -1,99 +1,49 @@
 package goloc
 
 import (
-	"aboxofsox/goloc/pkg/colors"
 	"bytes"
-	"encoding/json"
-	"fmt"
 	"io"
 	"io/fs"
 	"io/ioutil"
 	"log"
-	"os"
 	"path/filepath"
+	"strings"
 )
 
 type config struct {
-	Directories []string `json:"directories"`
+	Directories []string          `json:"directories"`
+	Colors      map[string]string `json:"colors"`
 }
 
-func New() {
-	c := config{
-		Directories: []string{},
-	}
+func Load(exclude []string) map[string]int64 {
+	var total int64 = 0
+	defs := map[string]int64{}
+	println(len(exclude))
 
-	file, _ := json.MarshalIndent(c, "", " ")
-	if _, err := os.Stat("config.json"); os.IsNotExist(err) {
-		ioutil.WriteFile("config.json", file, 0644)
-	} else {
-		return
-	}
-}
-
-func loadConfig() config {
-	var c config
-	file, err := ioutil.ReadFile("./config.json")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = json.Unmarshal(file, &c)
-	return c
-}
-
-func Load() map[string]int64 {
-	c := loadConfig()
-	langs := map[string]int64{}
-
-	for _, d := range c.Directories {
-		err := filepath.Walk(d, func(pp string, info fs.FileInfo, err error) error {
-			if err != nil {
-				return err
-			}
-
-			if info.IsDir() {
-				return nil
-			}
-
-			switch filepath.Ext(info.Name())[1:] {
-			case "html":
-				langs["html"] += Count(Reader(pp))
-			case "css":
-				langs["css"] += Count(Reader(pp))
-			case "js":
-				langs["javascript"] += Count(Reader(pp))
-			case "ts":
-				langs["typescript"] += Count(Reader(pp))
-			case "go":
-				langs["go"] += Count(Reader(pp))
-			case "vue":
-				langs["vue"] += Count(Reader(pp))
-			case "json":
-				langs["json"] += Count(Reader(pp))
-			case "jsx":
-				langs["jsx"] += Count(Reader(pp))
-			case "tsx":
-				langs["tsx"] += Count(Reader(pp))
-			case "c":
-				langs["c"] += Count(Reader(pp))
-			case "cs":
-				langs["csharp"] += Count(Reader(pp))
-			case "txt":
-				langs["text"] += Count(Reader(pp))
-			case "py":
-				langs["python"] += Count(Reader(pp))
-			default:
-				langs["other"] += Count(Reader(pp))
-			}
-
-			return nil
-		})
-
+	filepath.Walk(".", func(pp string, fi fs.FileInfo, err error) error {
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
-	}
-	return langs
+
+		if pp[0:1] != "." && !fi.IsDir() {
+			ps := strings.Split(pp, string(filepath.Separator))[0]
+			if len(exclude) > 0 {
+				for i := range exclude {
+					if ps != exclude[i] {
+						println(ps, exclude[i])
+						defs[filepath.Ext(pp)[1:]] += Count(Reader(pp))
+						total += Count(Reader(pp))
+					} else {
+						return nil
+					}
+				}
+			}
+		}
+
+		return nil
+	})
+
+	return defs
 }
 
 func Reader(p string) io.Reader {
@@ -121,13 +71,5 @@ func Count(r io.Reader) int64 {
 			return i
 
 		}
-	}
-
-}
-
-func Printer(src map[string]int64) {
-	for k, v := range src {
-		out := colors.Color(k, k, v)
-		fmt.Println(out)
 	}
 }
