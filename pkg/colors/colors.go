@@ -11,20 +11,20 @@ const flags = 0x0001 | 0x0002 | 0x0004
 
 var colors = map[string]string{
 	"reset":        "\033[0m",
-	"javascript":   "\033[031m", // Red
-	"python":       "\033[031m", // Red
-	"typescript":   "\033[032m", // Green
-	"vue":          "\033[032m", // Green
-	"html":         "\033[33m",  // Yellow
-	"css":          "\033[34m",  // Blue
-	"json":         "\033[35m",  // Purple (Magenta)
-	"go":           "\033[36m",  // Cyan
-	"txt":          "\033[37m",
-	"white":        "\033[97m",
+	"javascript":   "\033[031m",  // Red
+	"python":       "\033[031m",  // Red
+	"typescript":   "\033[032m",  // Green
+	"vue":          "\033[032m",  // Green
+	"html":         "\033[33m",   // Yellow
+	"css":          "\033[34m",   // Blue
+	"json":         "\033[35m",   // Purple (Magenta)
+	"go":           "\033[36m",   // Cyan
+	"txt":          "\033[37m",   // Gray
+	"bat":          "\033[97m",   // White
 	"sass":         "\033[31;1m", // Bright Red
 	"scss":         "\033[31;1m", // Bright Red
-	"tsx":          "\033[32;1m",
-	"ps1":          "\033[33;1m",
+	"tsx":          "\033[32;1m", // Bright Green
+	"ps1":          "\033[33;1m", // Bright Yellow
 	"jsx":          "\033[34;1m", // Bright Blue
 	"c":            "\033[35;1m", // Bright Purple
 	"csharp":       "\033[36;1m", // Bright Cyan
