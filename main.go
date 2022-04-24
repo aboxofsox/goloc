@@ -13,7 +13,7 @@ func main() {
 		NoFormat     bool
 		Debug        bool
 
-		Exclude string
+		Ignore string
 	)
 
 	// Set boolean flags
@@ -24,14 +24,14 @@ func main() {
 	flag.BoolVar(&Debug, "debug", false, "Mostly used to see a visualization of the exclusion list.")
 
 	// Set string flags
-	flag.StringVar(&Exclude, "exclude", "", "Add directories to exclude.")
+	flag.StringVar(&Ignore, "ignore", "", "Add directories to Ignore.")
 
 	flag.Parse()
 	tail := []string{}
 
-	if Exclude != "" {
+	if Ignore != "" {
 		tail = flag.Args()
-		tail = append([]string{Exclude}, tail...)
+		tail = append([]string{Ignore}, tail...)
 	}
 
 	if UseGitIgnore {
