@@ -7,10 +7,6 @@ import (
 	"github.com/fatih/color"
 )
 
-func Table(table map[string]int) string {
-	return ""
-}
-
 func Out(str string, value int) string {
 	return fmt.Sprintf("%s%s%s",
 		color.CyanString(str+":"),
