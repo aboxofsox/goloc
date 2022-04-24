@@ -3,6 +3,8 @@ package main
 import (
 	goloc "aboxofsox/goloc/pkg"
 	"flag"
+	"fmt"
+	"strings"
 )
 
 func main() {
@@ -49,5 +51,8 @@ func main() {
 			println(goloc.Out(ext, value))
 		}
 	}
+	fmt.Println(strings.Repeat("-", 10))
+	println(goloc.OutTotal(total))
+
 	println()
 }

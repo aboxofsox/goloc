@@ -15,6 +15,10 @@ func Out(str string, value int) string {
 	)
 }
 
+func OutTotal(total int) string {
+	return fmt.Sprintf("Total: %s", color.GreenString("%d", total))
+}
+
 func OutNoFmt(str string, value int) string {
 	return fmt.Sprintf(
 		"%s%s%d",
