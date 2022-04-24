@@ -2,51 +2,93 @@ package goloc
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"io/fs"
 	"io/ioutil"
 	"log"
 	"path/filepath"
+	"sort"
 	"strings"
+
+	"golang.org/x/exp/slices"
 )
 
-type config struct {
-	Directories []string          `json:"directories"`
-	Colors      map[string]string `json:"colors"`
+type File struct {
+	Ext   string
+	Value int
 }
 
-func Load(exclude []string) map[string]int64 {
-	var total int64 = 0
-	defs := map[string]int64{}
-	println(len(exclude))
+/*
+Loads files and counts their lines.
+A struct is used to reduce complexity within the filepath.WalkFunc.
 
-	filepath.Walk(".", func(pp string, fi fs.FileInfo, err error) error {
+Taks in a slice of strings.
+
+	ignore := []string{}
+*/
+func Load(ignore []string, debug bool) map[string]int {
+	var sl []string
+	files := []File{}
+	m := map[string]int{}
+
+	for _, ign := range ignore {
+		sl, _ = filepath.Glob(ign)
+	}
+
+	for _, s := range sl {
+		ignore = append(ignore, s)
+	}
+
+	if debug {
+		fmt.Printf("%s\n", strings.Repeat("-", 20))
+		fmt.Printf("Total Exclusions: %d\n", len(ignore))
+		for _, e := range ignore {
+			fmt.Printf(
+				"ignored: %s\n",
+				e,
+			)
+		}
+		fmt.Printf("%s\n", strings.Repeat("-", 20))
+	}
+
+	filepath.Walk(".", func(p string, fi fs.FileInfo, err error) error {
 		if err != nil {
+			fmt.Println(err.Error())
 			return err
 		}
 
-		if pp[0:1] != "." && !fi.IsDir() {
-			ps := strings.Split(pp, string(filepath.Separator))[0]
-			if len(exclude) > 0 {
-				for i := range exclude {
-					if ps != exclude[i] {
-						println(ps, exclude[i])
-						defs[filepath.Ext(pp)[1:]] += Count(Reader(pp))
-						total += Count(Reader(pp))
-					} else {
-						return nil
-					}
+		if !strings.HasPrefix(p, ".") {
+
+			if !slices.Contains(ignore, p) {
+				if !fi.IsDir() {
+					files = append(files, File{
+						Ext:   filepath.Ext(p)[1:],
+						Value: int(count(reader(p))),
+					})
 				}
+
+			} else {
+				return filepath.SkipDir
 			}
 		}
+
+		sort.Slice(files, func(i, j int) bool {
+			return files[i].Value > files[j].Value
+		})
 
 		return nil
 	})
 
-	return defs
+	for i := range files {
+		m[files[i].Ext] += files[i].Value
+	}
+
+	return m
 }
 
-func Reader(p string) io.Reader {
+// Read a file and covert it to io.Reader
+func reader(p string) io.Reader {
 	file, err := ioutil.ReadFile(p)
 	if err != nil {
 		log.Fatal(err)
@@ -56,7 +98,8 @@ func Reader(p string) io.Reader {
 	return reader
 }
 
-func Count(r io.Reader) int64 {
+// Take in io.Reader and count the number of line breaks.
+func count(r io.Reader) int64 {
 	b := make([]byte, 32*1024)
 	var i int64 = 1
 	ls := []byte{'\n'}
