@@ -21,3 +21,21 @@ goloc
 - [ ] Allow the usage of an optional ignore file separate from `.gitignore`
 - [ ] GitHub repo support.
 - [ ] Output to markdown.
+
+
+## Installation
+### Windows
+- Clone and build the repo or download the executable for your system.
+- Move the executable somewhere, or leave it there.
+- Add a the path to the executable to your `PATH` environment variable.
+  - If you want to be the only user with access to the executable, add it to the user variable `PATH`.
+  - If you want to have goloc available system-wide, add it to the system variable `PATH`.
+- Restart your terminal.
+
+### Linux
+- Clone and build the repo or download the binary for your system.
+- Copy or move the binary to `/usr/bin`.
+- Update your paths accordingly.
+
+### MacOS
+- Same as Linux, but on MacOS.
