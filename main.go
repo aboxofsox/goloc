@@ -8,8 +8,6 @@ import (
 func main() {
 	var (
 		UseGitIgnore bool
-		UseConfig    bool
-		NoDotFiles   bool
 		NoFormat     bool
 		Debug        bool
 
@@ -18,8 +16,6 @@ func main() {
 
 	// Set boolean flags
 	flag.BoolVar(&UseGitIgnore, "use-gitignore", false, "Choose to use .gitignore for directory exclusion.")
-	flag.BoolVar(&UseConfig, "use-custom-colors", false, "Use custom colors as defined in the config.")
-	flag.BoolVar(&NoDotFiles, "no-dotfiles", false, "Choose to ignore ALL dot files.")
 	flag.BoolVar(&NoFormat, "no-format", false, "Print the LoC count unformatted")
 	flag.BoolVar(&Debug, "debug", false, "Mostly used to see a visualization of the exclusion list.")
 
