@@ -31,14 +31,14 @@ func main() {
 	}
 
 	if UseGitIgnore {
-		gi := goloc.LoadGitIgnore()
+		gi := goloc.LoadGitIgnore(".gitignore")
 
 		for _, g := range gi {
 			tail = append(tail, g)
 		}
 	}
 
-	fs := goloc.Load(tail, Debug)
+	fs := goloc.Load(".", tail, Debug)
 	if NoFormat {
 		goloc.OutNoFmt(fs)
 	} else {

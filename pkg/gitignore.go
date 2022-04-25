@@ -10,14 +10,14 @@ import (
 )
 
 // Read .gitignore line-by-line.
-func LoadGitIgnore() []string {
+func LoadGitIgnore(p string) []string {
 	var ignore []string
-	_, err := os.Stat(".gitignore")
+	_, err := os.Stat(p)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	f, err := ioutil.ReadFile(".gitignore")
+	f, err := ioutil.ReadFile(p)
 	if err != nil {
 		log.Fatal(err)
 	}
