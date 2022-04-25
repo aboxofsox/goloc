@@ -38,7 +38,7 @@ func main() {
 		}
 	}
 
-	fs := goloc.Load(tail, Debug)
+	fs := goloc.Load(".", tail, Debug)
 	if NoFormat {
 		goloc.OutNoFmt(fs)
 	} else {
