@@ -28,7 +28,7 @@ Taks in a slice of strings.
 
 	ignore := []string{}
 */
-func Load(ignore []string, debug bool) map[string]int {
+func Load(target string, ignore []string, debug bool) map[string]int {
 	var sl []string
 	files := []File{}
 	m := map[string]int{}
@@ -53,7 +53,7 @@ func Load(ignore []string, debug bool) map[string]int {
 		fmt.Printf("%s\n", strings.Repeat("-", 20))
 	}
 
-	filepath.Walk(".", func(p string, fi fs.FileInfo, err error) error {
+	filepath.Walk(target, func(p string, fi fs.FileInfo, err error) error {
 		if err != nil {
 			fmt.Println(err.Error())
 			return err

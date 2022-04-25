@@ -31,7 +31,7 @@ func main() {
 	}
 
 	if UseGitIgnore {
-		gi := goloc.LoadGitIgnore()
+		gi := goloc.LoadGitIgnore(".gitignore")
 
 		for _, g := range gi {
 			tail = append(tail, g)
