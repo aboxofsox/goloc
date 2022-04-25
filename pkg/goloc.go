@@ -43,15 +43,17 @@ func Load(ignore []string, debug bool) map[string]int {
 	if debug {
 		fmt.Printf("%s\n", strings.Repeat("-", 20))
 		fmt.Printf("Total Exclusions: %d\n", len(ignore))
-		for _, e := range ignore {
+		for i, e := range ignore {
 			fmt.Printf(
-				"ignored: %s\n",
+				"%d. ignored: %s\n",
+				i,
 				e,
 			)
 		}
 		fmt.Printf("%s\n", strings.Repeat("-", 20))
 	}
 
+	// By default, bin directories are ignored.
 	filepath.Walk(".", func(p string, fi fs.FileInfo, err error) error {
 		if err != nil {
 			fmt.Println(err.Error())
@@ -59,7 +61,6 @@ func Load(ignore []string, debug bool) map[string]int {
 		}
 
 		if !strings.HasPrefix(p, ".") {
-
 			if !slices.Contains(ignore, p) {
 				if !fi.IsDir() {
 					files = append(files, File{
