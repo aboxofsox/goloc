@@ -17,7 +17,7 @@ goloc
 ## Todo
 - [ ] Add colors based on extension.
 - [ ] Replace the output extension names with their filetype names.
-- [ ] Make the formatted output less garbage.
+- [x] Make the formatted output less garbage.
 - [ ] Allow the usage of an optional ignore file separate from `.gitignore`
 - [ ] GitHub repo support.
 - [ ] Output to markdown.
