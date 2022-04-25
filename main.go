@@ -4,8 +4,22 @@ import (
 	goloc "aboxofsox/goloc/pkg"
 	"flag"
 	"fmt"
+	"sort"
 	"strings"
 )
+
+func sorter(m map[string]int) []string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+
+	sort.Slice(keys, func(i, j int) bool {
+		return m[keys[i]] > m[keys[j]]
+	})
+
+	return keys
+}
 
 func main() {
 	var (
@@ -42,15 +56,18 @@ func main() {
 
 	total := 0
 	fs := goloc.Load(tail, Debug)
+	fss := sorter(fs)
 	println()
-	for ext, value := range fs {
-		total += value
+	for _, k := range fss {
+		total += fs[k]
 		if NoFormat {
-			println(goloc.OutNoFmt(ext, value))
+			println(goloc.OutNoFmt(k, fs[k]))
 		} else {
-			println(goloc.Out(ext, value))
+			println(goloc.Out(k, fs[k]))
 		}
+
 	}
+
 	fmt.Println(strings.Repeat("-", 10))
 	println(goloc.OutTotal(total))
 

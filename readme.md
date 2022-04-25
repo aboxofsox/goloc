@@ -21,6 +21,7 @@ goloc
 - [ ] Allow the usage of an optional ignore file separate from `.gitignore`
 - [ ] GitHub repo support.
 - [ ] Output to markdown.
+- [x] Sort the final output.
 
 
 ## Installation
