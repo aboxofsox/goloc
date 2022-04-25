@@ -1,6 +1,7 @@
 package goloc
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
 	"io"
@@ -32,10 +33,6 @@ func Load(ignore []string, debug bool) map[string]int {
 	files := []File{}
 	m := map[string]int{}
 
-	for _, ign := range ignore {
-		sl, _ = filepath.Glob(ign)
-	}
-
 	for _, s := range sl {
 		ignore = append(ignore, s)
 	}
@@ -44,16 +41,18 @@ func Load(ignore []string, debug bool) map[string]int {
 		fmt.Printf("%s\n", strings.Repeat("-", 20))
 		fmt.Printf("Total Exclusions: %d\n", len(ignore))
 		for i, e := range ignore {
-			fmt.Printf(
-				"%d. ignored: %s\n",
-				i,
-				e,
-			)
+			if e != "" {
+				fmt.Printf(
+					"%d. %s\n",
+					i+1,
+					e,
+				)
+			}
+
 		}
 		fmt.Printf("%s\n", strings.Repeat("-", 20))
 	}
 
-	// By default, bin directories are ignored.
 	filepath.Walk(".", func(p string, fi fs.FileInfo, err error) error {
 		if err != nil {
 			fmt.Println(err.Error())
@@ -100,20 +99,15 @@ func reader(p string) io.Reader {
 }
 
 // Take in io.Reader and count the number of line breaks.
-func count(r io.Reader) int64 {
-	b := make([]byte, 32*1024)
-	var i int64 = 1
-	ls := []byte{'\n'}
+func count(r io.Reader) int {
+	c := 0
+	sc := bufio.NewScanner(r)
+	sc.Split(bufio.ScanLines)
 
-	for {
-		c, err := r.Read(b)
-		i += int64(bytes.Count(b[:c], ls))
-		switch {
-		case err == io.EOF:
-			return i
-		case err != nil:
-			return i
-
-		}
+	for sc.Scan() {
+		c++
 	}
+
+	return c
+
 }

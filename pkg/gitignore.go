@@ -1,42 +1,36 @@
 package goloc
 
 import (
+	"bufio"
+	"bytes"
 	"io/ioutil"
 	"log"
 	"os"
 	"strings"
 )
 
-type GitIgnore struct {
-	Contents []string
-	Globs    []string
-}
-
-func LoadGitIgnore() *GitIgnore {
-	var gitignore GitIgnore
+// Read .gitignore line-by-line.
+func LoadGitIgnore() []string {
+	var ignore []string
 	_, err := os.Stat(".gitignore")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	file, err := ioutil.ReadFile(".gitignore")
+	f, err := ioutil.ReadFile(".gitignore")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	content := strings.Split(string(file), "\n")
-	if len(content) == 0 {
-		return nil
-	}
+	r := bytes.NewReader(f)
+	sc := bufio.NewScanner(r)
+	sc.Split(bufio.ScanLines)
 
-	for _, c := range content {
-		if !strings.HasPrefix(c, "#") {
-			gitignore.Contents = append(gitignore.Contents, c)
-		}
-		if strings.HasPrefix(c, "*") {
-			gitignore.Globs = append(gitignore.Globs, c)
+	for sc.Scan() {
+		if !strings.HasPrefix(sc.Text(), "#") {
+			ignore = append(ignore, sc.Text())
 		}
 	}
 
-	return &gitignore
+	return ignore
 }
