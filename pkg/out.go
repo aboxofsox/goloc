@@ -36,19 +36,17 @@ func OutNoFmt(m map[string]int) {
 
 func OutBox(m map[string]int, tabsize int) {
 	total := 0
-	mx := max(m)
+	mx := len(strconv.FormatInt(int64(max(m)), 10))
 	srt := sorter(m)
-	mxl := maxlength(srt)
-	w := tabwriter.NewWriter(os.Stdout, 1, tabsize, 1, ' ', 0)
+	w := tabwriter.NewWriter(os.Stdout, 0, tabsize, 0, ' ', 0)
 
-	println()
 	fmt.Fprintf(
 		w,
-		"%v\t%s\t%s%v%v\n",
+		"%v\t%s%s%s%v\n",
 		tlc,
 		color.CyanString("Ext"),
+		strings.Repeat(hln, tabsize+mx-2),
 		color.CyanString("LoC"),
-		strings.Repeat(" ", gap(mx, 2)),
 		trc,
 	)
 
@@ -56,25 +54,27 @@ func OutBox(m map[string]int, tabsize int) {
 		total += m[k]
 		fmt.Fprintf(
 			w,
-			"%v\t%s:\t%d\t%v\n",
+			"%v\t%s: \t%d\t%v\t\n",
 			vln,
-			color.YellowString(k), m[k],
+			color.HiYellowString(ConvExt(k)),
+			m[k],
 			vln,
 		)
 	}
 
 	fmt.Fprintf(
 		w,
-		"%v%v%v%v\n",
+		"%v\t%s%s%d%v\n",
 		blc,
-		strings.Repeat(hln, mxl+2),
-		strings.Repeat(hln, len(strconv.FormatInt(int64(mx), 10))+2),
+		color.HiBlueString("Total"),
+		strings.Repeat(hln, (tabsize+mx)-lennum(total)-1),
+		total,
 		brc,
 	)
 
 	w.Flush()
 
-	fmt.Printf("%s: %d", color.HiBlueString("Total"), total)
+	// fmt.Printf("%s: %d", color.HiBlueString("Total"), total)
 	println()
 }
 
@@ -122,9 +122,10 @@ func maxlength(sl []string) int {
 	return m
 }
 
-func gap(mx, diff int) int {
-	if diff > mx {
-		diff = mx
-	}
-	return len(strconv.FormatInt(int64(mx), 10)) - diff
+func gap(mx int) int {
+	return len(strconv.FormatInt(int64(mx), 10))
+}
+
+func lennum(n int) int {
+	return len(strconv.FormatInt(int64(n), 10))
 }
