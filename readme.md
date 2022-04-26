@@ -15,8 +15,7 @@ goloc
 | `--debug`           | Prints a list of the directories and/or files expected to be ignored. |
 
 ## Todo
-- [ ] Add colors based on extension.
-- [ ] Replace the output extension names with their filetype names.
+- [x] Replace the output extension names with their filetype names.
 - [x] Make the formatted output less garbage.
 - [ ] Allow the usage of an optional ignore file separate from `.gitignore`
 - [ ] GitHub repo support.
