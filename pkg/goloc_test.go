@@ -39,7 +39,7 @@ func TestLoad(t *testing.T) {
 			value: 12,
 		},
 		{
-			key:   "js",
+			key:   "javascript",
 			value: 28,
 		},
 	}

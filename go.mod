@@ -8,4 +8,5 @@ require (
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	golang.org/x/exp v0.0.0-20220414153411-bcd21879b8fd // indirect
 	golang.org/x/sys v0.0.0-20211019181941-9d821ace8654 // indirect
+	golang.org/x/term v0.0.0-20220411215600-e5f449aeb171 // indirect
 )

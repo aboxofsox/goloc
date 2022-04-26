@@ -63,7 +63,7 @@ func Load(target string, ignore []string, debug bool) map[string]int {
 			if !slices.Contains(ignore, p) {
 				if !fi.IsDir() {
 					files = append(files, File{
-						Ext:   filepath.Ext(p)[1:],
+						Ext:   ConvExt(filepath.Ext(p)[1:]),
 						Value: int(count(reader(p))),
 					})
 				}
@@ -99,8 +99,7 @@ func reader(p string) io.Reader {
 }
 
 // Take in io.Reader and count the number of line breaks.
-func count(r io.Reader) int {
-	c := 0
+func count(r io.Reader) (c int) {
 	sc := bufio.NewScanner(r)
 	sc.Split(bufio.ScanLines)
 
@@ -109,5 +108,4 @@ func count(r io.Reader) int {
 	}
 
 	return c
-
 }
