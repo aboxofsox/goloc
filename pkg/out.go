@@ -74,7 +74,6 @@ func OutBox(m map[string]int, tabsize int) {
 
 	w.Flush()
 
-	// fmt.Printf("%s: %d", color.HiBlueString("Total"), total)
 	println()
 }
 
