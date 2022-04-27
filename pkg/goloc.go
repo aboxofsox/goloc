@@ -58,7 +58,6 @@ func Load(target string, ignore []string, debug bool) map[string]int {
 			fmt.Println(err.Error())
 			return err
 		}
-
 		if !strings.HasPrefix(p, ".") {
 			if !slices.Contains(ignore, p) {
 				if !fi.IsDir() {
