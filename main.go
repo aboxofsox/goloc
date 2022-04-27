@@ -41,7 +41,7 @@ func main() {
 
 	fs := goloc.Load(".", tail, Debug)
 	if IsOutFile {
-		goloc.MkmdPbars(fs)
+		goloc.Mkmd(fs)
 	}
 	if NoFormat {
 		goloc.OutNoFmt(fs)
