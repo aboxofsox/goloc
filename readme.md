@@ -22,7 +22,7 @@ goloc
 - [ ] GitHub repo support.
 - [x] Output to markdown.
 - [x] Sort the final output.
-- [ ] Add file extenions to ignore list.
+- [x] Add file extenions to ignore list.
 
 
 ## Installation
