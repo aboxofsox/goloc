@@ -92,7 +92,7 @@ func Load(target string, ignore, extignore []string, debug bool) map[string]int 
 	return m
 }
 
-// Take in io.Reader and count the number of line breaks.
+// Read file and count total number of lines.
 func count(p string) (c int) {
 	file, err := os.Open(p)
 	if err != nil {
@@ -107,11 +107,6 @@ func count(p string) (c int) {
 	}
 
 	for sc.Scan() {
-		if rgxhtml.MatchString(sc.Text()) {
-			// do stuff
-		} else {
-			// don't do stuff
-		}
 		c++
 	}
 
