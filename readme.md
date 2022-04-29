@@ -20,7 +20,7 @@ goloc
 - [x] Make the formatted output less garbage.
 - [ ] Allow the usage of an optional ignore file separate from `.gitignore`
 - [ ] GitHub repo support.
-- [ ] Output to markdown.
+- [x] Output to markdown.
 - [x] Sort the final output.
 - [ ] Add file extenions to ignore list.
 

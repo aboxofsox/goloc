@@ -12,6 +12,7 @@ import (
 // Read .gitignore line-by-line.
 func LoadGitIgnore(p string) []string {
 	var ignore []string
+	var extignore []string
 	_, err := os.Stat(p)
 	if err != nil {
 		log.Fatal(err)
@@ -29,6 +30,9 @@ func LoadGitIgnore(p string) []string {
 	for sc.Scan() {
 		if !strings.HasPrefix(sc.Text(), "#") {
 			ignore = append(ignore, sc.Text())
+		}
+		if strings.HasPrefix(sc.Text(), ".") && sc.Text()[1:2] != "/" || sc.Text()[1:2] != "*" {
+			extignore = append(extignore, sc.Text())
 		}
 	}
 

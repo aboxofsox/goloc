@@ -6,6 +6,7 @@ import (
 
 // Convert extension name to it's associated language
 func ConvExt(ext string) (res string) {
+	trm := 0
 	switch ext {
 
 	case "js", "jsx", "vue", "react", "vuex":
@@ -64,13 +65,11 @@ func ConvExt(ext string) (res string) {
 
 	default:
 		res = ext
-	}
 
-	if len(ext) > 10 {
-		res = "other"
 	}
+	trm = len(res)
 
-	return trim(res, 10)
+	return trim(res, trm)
 }
 
 func trim(str string, n int) string {

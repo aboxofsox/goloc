@@ -2,13 +2,12 @@ package goloc
 
 import (
 	"bufio"
-	"bytes"
 	"fmt"
-	"io"
 	"io/fs"
-	"io/ioutil"
 	"log"
+	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -28,7 +27,7 @@ Taks in a slice of strings.
 
 	ignore := []string{}
 */
-func Load(target string, ignore []string, debug bool) map[string]int {
+func Load(target string, ignore, extignore []string, debug bool) map[string]int {
 	var sl []string
 	files := []File{}
 	m := map[string]int{}
@@ -39,7 +38,7 @@ func Load(target string, ignore []string, debug bool) map[string]int {
 
 	if debug {
 		fmt.Printf("%s\n", strings.Repeat("-", 20))
-		fmt.Printf("Total Exclusions: %d\n", len(ignore))
+		fmt.Printf("Total Exclusions: %d\n", len(ignore)+len(extignore))
 		for i, e := range ignore {
 			if e != "" {
 				fmt.Printf(
@@ -48,7 +47,11 @@ func Load(target string, ignore []string, debug bool) map[string]int {
 					e,
 				)
 			}
-
+		}
+		for i, e := range extignore {
+			if e != "" {
+				fmt.Printf("%d. %s\n", i+len(ignore)+1, e)
+			}
 		}
 		fmt.Printf("%s\n", strings.Repeat("-", 20))
 	}
@@ -58,18 +61,21 @@ func Load(target string, ignore []string, debug bool) map[string]int {
 			fmt.Println(err.Error())
 			return err
 		}
-		if !strings.HasPrefix(p, ".") {
-			if !slices.Contains(ignore, p) {
-				if !fi.IsDir() {
+		pp := strings.Split(p, string(filepath.Separator))
+
+		if !slices.Contains(ignore, pp[0]) {
+			if !strings.HasPrefix(p, ".") && !fi.IsDir() && len(filepath.Ext(p)) != 0 {
+				if !slices.Contains(extignore, filepath.Ext(p)[1:]) {
 					files = append(files, File{
 						Ext:   ConvExt(filepath.Ext(p)[1:]),
-						Value: int(count(reader(p))),
+						Value: int(count(p)),
 					})
 				}
 
-			} else {
-				return filepath.SkipDir
 			}
+
+		} else {
+			return filepath.SkipDir
 		}
 
 		sort.Slice(files, func(i, j int) bool {
@@ -86,25 +92,28 @@ func Load(target string, ignore []string, debug bool) map[string]int {
 	return m
 }
 
-// Read a file and covert it to io.Reader
-func reader(p string) io.Reader {
-	file, err := ioutil.ReadFile(p)
+// Take in io.Reader and count the number of line breaks.
+func count(p string) (c int) {
+	file, err := os.Open(p)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	reader := bytes.NewReader(file)
-	return reader
-}
-
-// Take in io.Reader and count the number of line breaks.
-func count(r io.Reader) (c int) {
-	sc := bufio.NewScanner(r)
+	sc := bufio.NewScanner(file)
 	sc.Split(bufio.ScanLines)
 
+	rgxhtml, err := regexp.Compile(`<!--[\s\S|\n].*-->`)
+	if err != nil {
+		log.Println(rgxhtml)
+	}
+
 	for sc.Scan() {
+		if rgxhtml.MatchString(sc.Text()) {
+			// do stuff
+		} else {
+			// don't do stuff
+		}
 		c++
 	}
 
-	return c
+	return
 }
