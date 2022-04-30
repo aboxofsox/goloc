@@ -1,4 +1,4 @@
-module aboxofsox/goloc
+module github.com/aboxofsox/goloc
 
 go 1.18
 

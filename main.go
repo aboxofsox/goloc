@@ -1,9 +1,10 @@
 package main
 
 import (
-	goloc "aboxofsox/goloc/pkg"
 	"flag"
 	"strings"
+
+	goloc "github.com/aboxofsox/goloc/pkg"
 )
 
 func main() {

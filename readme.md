@@ -25,4 +25,17 @@ goloc
 
 
 ## Installation
-`go install`
+### Recommended
+If you have Go installed, simply `go install github.com/aboxofsox/goloc`
+
+### Windows
+If you want to add the executable as a global command in Windows:
+
+- Download the executable
+- Put the executable somewhere on your C: drive. For example: `C:\Program Files\goloc`.
+- Add the path to wherever you put that executable to your PATH System Variable.
+- Restart any terminal windows you have open.
+
+### Linux & MacOS
+- Download the correct binary for your system.
+- Copy the binary to `/usr/bin`
