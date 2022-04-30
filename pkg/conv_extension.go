@@ -1,15 +1,10 @@
 package goloc
 
-import (
-	"strings"
-)
-
 // Convert extension name to it's associated language
 func ConvExt(ext string) (res string) {
-	trm := 0
 	switch ext {
 
-	case "js", "jsx", "vue", "react", "vuex":
+	case "js":
 		res = "javascript"
 
 	case "ts", "tsx":
@@ -67,21 +62,6 @@ func ConvExt(ext string) (res string) {
 		res = ext
 
 	}
-	trm = len(res)
 
-	return trim(res, trm)
-}
-
-func trim(str string, n int) string {
-	var ns []string
-	if n >= len(str) {
-		return str
-	}
-	sl := strings.Split(str, "")
-	for i := 0; i < n; i++ {
-		ns = append(ns, sl[i])
-	}
-
-	return strings.Join(ns, "")
-
+	return res
 }

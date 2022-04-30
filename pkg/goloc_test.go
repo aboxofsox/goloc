@@ -17,7 +17,7 @@ func TestGitignore(t *testing.T) {
 	gi := LoadGitIgnore("./test_.gitignore")
 
 	if len(gi) != 3 {
-		t.Errorf("Expected LoadGitIgnore length to be 3, but got %d", len(gi))
+		t.Errorf("Expected LoadGitIgnore() length to be 3, but got %d", len(gi))
 	}
 
 	for _, g := range gi {
@@ -77,7 +77,6 @@ func TestLoad(t *testing.T) {
 func TestLoadIgnore(t *testing.T) {
 	gi := LoadGitIgnore("./test_2.gitignore")
 	m := Load("./test_dir", gi, nil, false)
-	fmt.Println(gi)
 
 	if len(gi) != 1 {
 		t.Errorf("Expected LoadGitIgnore() length to be 3, but got %d", len(gi))

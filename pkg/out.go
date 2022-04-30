@@ -97,12 +97,11 @@ func sorter(m map[string]int) []string {
 	return keys
 }
 
-func max(mp map[string]int) int {
+func max(mp map[string]int) (m int) {
 	var vs []int
 	for _, v := range mp {
 		vs = append(vs, v)
 	}
-	m := 0
 	if len(vs) == 0 {
 		m = 0
 	}
@@ -112,11 +111,10 @@ func max(mp map[string]int) int {
 		}
 	}
 
-	return m
+	return
 }
 
-func maxlength(sl []string) int {
-	m := 0
+func maxlength(sl []string) (m int) {
 	if len(sl) == 0 {
 		m = 0
 	}
@@ -125,7 +123,7 @@ func maxlength(sl []string) int {
 			m = len(s)
 		}
 	}
-	return m
+	return
 }
 
 func gap(mx int) int {

@@ -20,7 +20,6 @@ func main() {
 	// Set boolean flags
 	flag.BoolVar(&UseGitIgnore, "use-gitignore", false, "Choose to use .gitignore for directory exclusion.")
 	flag.BoolVar(&NoFormat, "no-format", false, "Print the LoC count unformatted")
-	flag.BoolVar(&Debug, "debug", false, "Mostly used to see a visualization of the exclusion list.")
 	flag.BoolVar(&IsOutFile, "out-file", false, "Copy output to markdown.")
 
 	// Set string flags

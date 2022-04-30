@@ -12,7 +12,6 @@ goloc
 | `--use-gitignore`   | Use your `.gitignore` file as the basis of directory exclusion.         |
 | `--ignore <dir>...` | Define your own list of directories to exclude.                       |
 | `--no-format`       | Prints the output without the bad formatting.                         |
-| `--debug`           | Prints a list of the directories and/or files expected to be ignored. |
 | `--out-file` | Save the output as a markdown file.
 
 ## Todo
