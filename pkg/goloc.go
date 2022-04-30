@@ -21,14 +21,6 @@ type File struct {
 func Load(target string, ignore, extignore []string, debug bool) map[string]int {
 	m := map[string]int{}
 
-	for _, ig := range ignore {
-		gs, _ := filepath.Glob(ig + "/**")
-		for _, g := range gs {
-			ignore = append(ignore, g)
-			fmt.Println(g)
-		}
-	}
-
 	filepath.Walk(target, func(p string, fi fs.FileInfo, err error) error {
 		if err != nil {
 			fmt.Println(err.Error())
