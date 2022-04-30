@@ -27,7 +27,7 @@ func OutNoFmt(m map[string]int) {
 	println()
 	for _, k := range srt {
 		total += m[k]
-		fmt.Printf("%s: %d\n", k, m[k])
+		fmt.Printf("%s %d\n", k, m[k])
 	}
 	fmt.Printf("%s: %d\n", "Total", total)
 	println()
@@ -38,6 +38,7 @@ func OutBox(m map[string]int, tabsize int) {
 	total := 0
 	mx := len(strconv.FormatInt(int64(max(m)), 10))
 	srt := sorter(m)
+	spc := 0
 	w := tabwriter.NewWriter(os.Stdout, 0, tabsize, 0, ' ', 0)
 
 	fmt.Fprintf(
@@ -51,12 +52,18 @@ func OutBox(m map[string]int, tabsize int) {
 	)
 
 	for _, k := range srt {
+		if len(k) < 10 {
+			spc = 2
+		} else if len(k) >= 10 {
+			spc = 0
+		}
 		total += m[k]
 		fmt.Fprintf(
 			w,
-			"%v\t%s: \t%d\t%v\t\n",
+			"%v\t%s:%v \t%d\t%v\t\n",
 			vln,
 			color.HiYellowString(ConvExt(k)),
+			strings.Repeat(" ", spc),
 			m[k],
 			vln,
 		)
@@ -90,12 +97,11 @@ func sorter(m map[string]int) []string {
 	return keys
 }
 
-func max(mp map[string]int) int {
+func max(mp map[string]int) (m int) {
 	var vs []int
 	for _, v := range mp {
 		vs = append(vs, v)
 	}
-	m := 0
 	if len(vs) == 0 {
 		m = 0
 	}
@@ -105,11 +111,10 @@ func max(mp map[string]int) int {
 		}
 	}
 
-	return m
+	return
 }
 
-func maxlength(sl []string) int {
-	m := 0
+func maxlength(sl []string) (m int) {
 	if len(sl) == 0 {
 		m = 0
 	}
@@ -118,7 +123,7 @@ func maxlength(sl []string) int {
 			m = len(s)
 		}
 	}
-	return m
+	return
 }
 
 func gap(mx int) int {

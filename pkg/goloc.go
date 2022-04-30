@@ -2,14 +2,11 @@ package goloc
 
 import (
 	"bufio"
-	"bytes"
 	"fmt"
-	"io"
 	"io/fs"
-	"io/ioutil"
 	"log"
+	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 
 	"golang.org/x/exp/slices"
@@ -20,38 +17,9 @@ type File struct {
 	Value int
 }
 
-/*
-Loads files and counts their lines.
-A struct is used to reduce complexity within the filepath.WalkFunc.
-
-Taks in a slice of strings.
-
-	ignore := []string{}
-*/
-func Load(target string, ignore []string, debug bool) map[string]int {
-	var sl []string
-	files := []File{}
+// Load files and count their lines.
+func Load(target string, ignore, extignore []string, debug bool) map[string]int {
 	m := map[string]int{}
-
-	for _, s := range sl {
-		ignore = append(ignore, s)
-	}
-
-	if debug {
-		fmt.Printf("%s\n", strings.Repeat("-", 20))
-		fmt.Printf("Total Exclusions: %d\n", len(ignore))
-		for i, e := range ignore {
-			if e != "" {
-				fmt.Printf(
-					"%d. %s\n",
-					i+1,
-					e,
-				)
-			}
-
-		}
-		fmt.Printf("%s\n", strings.Repeat("-", 20))
-	}
 
 	filepath.Walk(target, func(p string, fi fs.FileInfo, err error) error {
 		if err != nil {
@@ -59,53 +27,32 @@ func Load(target string, ignore []string, debug bool) map[string]int {
 			return err
 		}
 
-		if !strings.HasPrefix(p, ".") {
-			if !slices.Contains(ignore, p) {
-				if !fi.IsDir() {
-					files = append(files, File{
-						Ext:   ConvExt(filepath.Ext(p)[1:]),
-						Value: int(count(reader(p))),
-					})
-				}
-
-			} else {
-				return filepath.SkipDir
-			}
+		if slices.Contains(ignore, p) {
+			return filepath.SkipDir
 		}
 
-		sort.Slice(files, func(i, j int) bool {
-			return files[i].Value > files[j].Value
-		})
+		if !fi.IsDir() && !strings.HasPrefix(p, ".") && len(filepath.Ext(p)) != 0 && !slices.Contains(extignore, filepath.Ext(p)[1:]) {
+			m[ConvExt(filepath.Ext(p)[1:])] += count(p)
+		}
 
 		return nil
 	})
 
-	for i := range files {
-		m[files[i].Ext] += files[i].Value
-	}
-
 	return m
 }
 
-// Read a file and covert it to io.Reader
-func reader(p string) io.Reader {
-	file, err := ioutil.ReadFile(p)
+// Read file and count total number of lines.
+func count(p string) (c int) {
+	file, err := os.Open(p)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	reader := bytes.NewReader(file)
-	return reader
-}
-
-// Take in io.Reader and count the number of line breaks.
-func count(r io.Reader) (c int) {
-	sc := bufio.NewScanner(r)
+	sc := bufio.NewScanner(file)
 	sc.Split(bufio.ScanLines)
 
 	for sc.Scan() {
 		c++
 	}
 
-	return c
+	return
 }
