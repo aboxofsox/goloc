@@ -58,6 +58,7 @@ func main() {
 	if NoFormat {
 		goloc.OutNoFmt(fs)
 	} else {
-		goloc.OutBox(fs, 8)
+		goloc.MakeTable(fs)
 	}
+
 }
