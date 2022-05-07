@@ -10,18 +10,17 @@ import (
 func main() {
 	var (
 		UseGitIgnore bool
-		NoFormat     bool
-		Debug        bool
 		IsOutFile    bool
 
+		Repo      string
 		Ignore    string
 		IgnoreExt string
 	)
 
 	// Set boolean flags
 	flag.BoolVar(&UseGitIgnore, "use-gitignore", false, "Choose to use .gitignore for directory exclusion.")
-	flag.BoolVar(&NoFormat, "no-format", false, "Print the LoC count unformatted")
 	flag.BoolVar(&IsOutFile, "out-file", false, "Copy output to markdown.")
+	flag.StringVar(&Repo, "repo", "", "Count the number of lines in a repo.")
 
 	// Set string flags
 	flag.StringVar(&Ignore, "ignore", "", "Add directories to be ignored.")
@@ -51,14 +50,16 @@ func main() {
 		}
 	}
 
-	fs := goloc.Load(".", tail, exttail, Debug)
+	fs := goloc.Load(".", tail, exttail)
 	if IsOutFile {
 		goloc.Mkmd(fs)
 	}
-	if NoFormat {
-		goloc.OutNoFmt(fs)
+
+	if len(Repo) > 0 {
+		goloc.Gitter("tmp", Repo, tail)
 	} else {
-		goloc.MakeTable(fs)
+		goloc.MakeTable(fs, "goloc")
+
 	}
 
 }

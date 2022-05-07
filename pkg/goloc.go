@@ -12,13 +12,8 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-type File struct {
-	Ext   string
-	Value int
-}
-
 // Load files and count their lines.
-func Load(target string, ignore, extignore []string, debug bool) map[string]int {
+func Load(target string, ignore, extignore []string) map[string]int {
 	m := map[string]int{}
 
 	filepath.Walk(target, func(p string, fi fs.FileInfo, err error) error {
@@ -47,6 +42,8 @@ func count(p string) (c int) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	defer file.Close()
 	sc := bufio.NewScanner(file)
 	sc.Split(bufio.ScanLines)
 

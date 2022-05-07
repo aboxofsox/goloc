@@ -23,6 +23,7 @@ Extension / Language               | Lines of Code                              
 
 `
 
+// Make a markdown that includes a table.
 func Mkmd(m map[string]int) {
 	os.Mkdir("files", 0777)
 	f, err := os.Create("gloc.md")
@@ -44,6 +45,7 @@ func Mkmd(m map[string]int) {
 
 }
 
+// Mkade a markdown file that includes progress bars.
 func MkmdPbars(m map[string]int) {
 	total := 0
 	prcts := map[string]float64{}

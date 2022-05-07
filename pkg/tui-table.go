@@ -1,6 +1,7 @@
 package goloc
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 	"strings"
@@ -22,6 +23,8 @@ var (
 			Background(lipgloss.Color("#ff0084")).
 			PaddingLeft(1).
 			PaddingRight(1).
+			PaddingBottom(1).
+			PaddingTop(1).
 			MarginBottom(1).
 			MarginTop(1)
 
@@ -89,8 +92,6 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m Model) View() string {
 	body := strings.Builder{}
 
-	body.WriteString(titleStyle.Render("Goloc"))
-	body.WriteString("\n")
 	body.WriteString(m.table.View())
 	body.WriteString("\n")
 	body.WriteString(totalStyle.Render("Total: ") + strconv.FormatInt(int64(total), 10))
@@ -99,7 +100,8 @@ func (m Model) View() string {
 	return body.String()
 }
 
-func MakeTable(m map[string]int) {
+func MakeTable(m map[string]int, title string) {
+	fmt.Println(titleStyle.Render(title))
 	p := tea.NewProgram(NewTable(m))
 
 	if err := p.Start(); err != nil {
