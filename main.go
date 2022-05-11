@@ -10,18 +10,19 @@ import (
 func main() {
 	var (
 		UseGitIgnore bool
-		NoFormat     bool
-		Debug        bool
 		IsOutFile    bool
 
+		Repo      string
 		Ignore    string
 		IgnoreExt string
+
+		fs map[string]int
 	)
 
 	// Set boolean flags
 	flag.BoolVar(&UseGitIgnore, "use-gitignore", false, "Choose to use .gitignore for directory exclusion.")
-	flag.BoolVar(&NoFormat, "no-format", false, "Print the LoC count unformatted")
 	flag.BoolVar(&IsOutFile, "out-file", false, "Copy output to markdown.")
+	flag.StringVar(&Repo, "repo", "", "Count the number of lines in a repo.")
 
 	// Set string flags
 	flag.StringVar(&Ignore, "ignore", "", "Add directories to be ignored.")
@@ -31,6 +32,7 @@ func main() {
 	tail := []string{}
 	exttail := []string{}
 
+	// A goofy way of getting string values defined after the -ignore and -ignore-ext flag.
 	if Ignore != "" {
 		tail = flag.Args()
 		tail = append([]string{Ignore}, tail...)
@@ -41,6 +43,7 @@ func main() {
 		exttail = append([]string{IgnoreExt}, exttail...)
 	}
 
+	// If the -use-gitignore flag is set, use the .gitignore file as the basis of files and directories to ignore.
 	if UseGitIgnore {
 		gi := goloc.LoadGitIgnore(".gitignore")
 		for _, g := range gi {
@@ -51,13 +54,19 @@ func main() {
 		}
 	}
 
-	fs := goloc.Load(".", tail, exttail, Debug)
+	// If the -out-file flag is set, make a markdown file with LoC displayed in a table.
 	if IsOutFile {
 		goloc.Mkmd(fs)
 	}
-	if NoFormat {
-		goloc.OutNoFmt(fs)
+
+	// If the -repo flag is set, clone the repo in a temporary location, count the lines, and the remove the directory.
+	// Else, count the LoC in the current directory.
+	if len(Repo) > 0 {
+		goloc.Gitter("tmp", Repo, tail)
 	} else {
-		goloc.OutBox(fs, 8)
+		fs = goloc.Load(".", tail, exttail)
+		goloc.MakeTable(fs, "goloc")
+
 	}
+
 }

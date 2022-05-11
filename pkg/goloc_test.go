@@ -38,7 +38,7 @@ func TestExtIgnore(t *testing.T) {
 			value: 28,
 		},
 	}
-	m := Load("./test_dir", nil, extignore, false)
+	m := Load("./test_dir", nil, extignore)
 	fmt.Println(m)
 	for _, test := range tests {
 		if m[test.key] != test.value {
@@ -50,7 +50,7 @@ func TestExtIgnore(t *testing.T) {
 
 func TestLoad(t *testing.T) {
 	ignore := []string{"test", "test2", "test3"}
-	m := Load("./test_dir", ignore, nil, false)
+	m := Load("./test_dir", ignore, nil)
 	tests := []Test{
 		{
 			key:   "css",
@@ -76,7 +76,7 @@ func TestLoad(t *testing.T) {
 
 func TestLoadIgnore(t *testing.T) {
 	gi := LoadGitIgnore("./test_2.gitignore")
-	m := Load("./test_dir", gi, nil, false)
+	m := Load("./test_dir", gi, nil)
 
 	if len(gi) != 1 {
 		t.Errorf("Expected LoadGitIgnore() length to be 3, but got %d", len(gi))

@@ -18,7 +18,7 @@ goloc
 - [x] Replace the output extension names with their filetype names.
 - [x] Make the formatted output less garbage.
 - [ ] Allow the usage of an optional ignore file separate from `.gitignore`
-- [ ] GitHub repo support.
+- [x] GitHub repo support.
 - [x] Output to markdown.
 - [x] Sort the final output.
 - [x] Add file extenions to ignore list.
