@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+// Markdown table template.
 var mrkdn string = `
 Extension / Language               | Lines of Code                                                           |
 |---------------------|-----------------------------------------------------------------------|
@@ -15,6 +16,7 @@ Extension / Language               | Lines of Code                              
 
 `
 
+// Markdown progress bar template.
 var mrkdnPBar string = `
 Extension / Language               | Lines of Code                                                           |
 |---------------------|-----------------------------------------------------------------------|

@@ -28,7 +28,7 @@ func Gitter(tmp, repo string, ignore []string) {
 		log.Fatal(err)
 	}
 
-	fs := Load(dir, ignore, nil)
+	fs := Load(dir, nil, nil)
 
 	MakeTable(fs, repo)
 }
